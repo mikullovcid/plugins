@@ -16,7 +16,7 @@ SKPaymentTransactionWrapper _$SKPaymentTransactionWrapperFromJson(Map json) {
     originalTransaction: json['originalTransaction'] == null
         ? null
         : SKPaymentTransactionWrapper.fromJson(
-            json['originalTransaction'] as Map),
+            jsonDecode(json['originalTransaction']) as Map),
     transactionTimeStamp: (json['transactionTimeStamp'] as num)?.toDouble(),
     transactionIdentifier: json['transactionIdentifier'] as String,
     error:
@@ -29,9 +29,9 @@ Map<String, dynamic> _$SKPaymentTransactionWrapperToJson(
     <String, dynamic>{
       'transactionState': const SKTransactionStatusConverter()
           .toJson(instance.transactionState),
-      'payment': instance.payment,
-      'originalTransaction': instance.originalTransaction,
+      'payment': jsonEncode(instance.payment.toMap()),
+      'originalTransaction': instance.originalTransaction.toString(),
       'transactionTimeStamp': instance.transactionTimeStamp,
       'transactionIdentifier': instance.transactionIdentifier,
-      'error': instance.error,
+      'error': instance.error.toString(),
     };

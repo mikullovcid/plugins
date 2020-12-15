@@ -5,6 +5,7 @@
 import 'dart:ui' show hashValues;
 import 'package:flutter/foundation.dart';
 import 'package:json_annotation/json_annotation.dart';
+import 'dart:convert';
 import 'enum_converters.dart';
 import 'billing_client_wrapper.dart';
 import 'sku_details_wrapper.dart';
@@ -71,6 +72,9 @@ class PurchaseWrapper {
       originalJson,
       isAcknowledged,
       purchaseState);
+
+      @override
+  String toString() => jsonEncode(_$PurchaseWrapperToJson(this));
 
   /// The unique ID for this purchase. Corresponds to the Google Payments order
   /// ID.

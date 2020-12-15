@@ -10,6 +10,8 @@ import 'package:in_app_purchase/src/store_kit_wrappers/sk_payment_transaction_wr
 import './in_app_purchase_connection.dart';
 import './product_details.dart';
 
+import 'dart:convert';
+
 /// [IAPError.code] code for failed purchases.
 final String kPurchaseErrorCode = 'purchase_error';
 
@@ -56,6 +58,37 @@ class PurchaseVerificationData {
 
   /// Indicates the source of the purchase.
   final IAPSource source;
+
+    PurchaseVerificationData purchaseVerificationDataFromJson(final jsonData) {
+  return PurchaseVerificationData.fromJson(jsonData);
+}
+
+static String purchaseVerificationDataToJson(PurchaseVerificationData data) {
+  final dyn = data.toJson();
+  return json.encode(dyn);
+}
+
+  static  getSourceFromString(String statusAsString) {
+  for (IAPSource element in IAPSource.values) {
+     if (element.toString() == statusAsString) {
+        return element;
+     }
+  }
+  return null;
+}
+
+  factory PurchaseVerificationData.fromJson(Map<String, dynamic> json) => PurchaseVerificationData(
+        localVerificationData: json["localVerificationData"],
+        serverVerificationData: json["serverVerificationData"],
+        source: getSourceFromString(json["source"])
+      );
+
+  Map<String, dynamic> toJson() => {
+        "localVerificationData": localVerificationData,
+        "serverVerificationData": serverVerificationData,
+        "source": source.toString()
+      };
+
 
   /// Creates a [PurchaseVerificationData] object with the provided information.
   PurchaseVerificationData(
@@ -217,6 +250,33 @@ class PurchaseDetails {
       );
     }
   }
+
+  PurchaseDetails purchaseDetailsFromJson(final jsonData) {
+  return PurchaseDetails.fromJson(jsonData);
+}
+
+static String purchaseDetailsToJson(PurchaseDetails data) {
+  final dyn = data.toJson();
+  return json.encode(dyn);
+}
+
+  factory PurchaseDetails.fromJson(Map<String, dynamic> json) => PurchaseDetails(
+        purchaseID: json["purchaseID"],
+        productID: json["productID"],
+        verificationData: PurchaseVerificationData.fromJson(jsonDecode(json["verificationData"])),
+        transactionDate: json["transactionDate"],
+        skPaymentTransaction: json["transactionDate"] != null ? SKPaymentTransactionWrapper.fromJson(jsonDecode(json["transactionDate"])) : null,
+        billingClientPurchase: json["billingClientPurchase"] != null ? PurchaseWrapper.fromJson(jsonDecode(json["billingClientPurchase"])) : null,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "purchaseID": purchaseID,
+        "productID": productID,
+        "verificationData": PurchaseVerificationData.purchaseVerificationDataToJson(verificationData),
+        "transactionData": transactionDate,
+        "skPaymentTransaction":  skPaymentTransaction.toString(),
+        "billingClientPurchase":   billingClientPurchase.toString()
+      };
 
   /// Generate a [PurchaseDetails] object based on an Android [Purchase] object.
   PurchaseDetails.fromPurchase(PurchaseWrapper purchase)

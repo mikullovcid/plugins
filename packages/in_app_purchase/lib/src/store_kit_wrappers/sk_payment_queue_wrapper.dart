@@ -11,6 +11,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'package:flutter/services.dart';
 import 'sk_payment_transaction_wrappers.dart';
 import 'sk_product_wrapper.dart';
+import 'dart:convert';
 
 part 'sk_payment_queue_wrapper.g.dart';
 
@@ -220,6 +221,11 @@ class SKError {
   /// Error [code](https://developer.apple.com/documentation/foundation/1448136-nserror_codes)
   /// as defined in the Cocoa Framework.
   final int code;
+
+  @override
+  toString(){
+    _$SKErrorToJson(this);
+  }
 
   /// Error
   /// [domain](https://developer.apple.com/documentation/foundation/nscocoaerrordomain?language=objc)

@@ -8,6 +8,7 @@ import 'package:json_annotation/json_annotation.dart';
 import 'sk_product_wrapper.dart';
 import 'sk_payment_queue_wrapper.dart';
 import 'enum_converters.dart';
+import 'dart:convert';
 
 part 'sk_payment_transaction_wrappers.g.dart';
 
@@ -185,7 +186,7 @@ class SKPaymentTransactionWrapper {
       this.error);
 
   @override
-  String toString() => _$SKPaymentTransactionWrapperToJson(this).toString();
+  String toString() => jsonEncode(_$SKPaymentTransactionWrapperToJson(this));
 
   /// The payload that is used to finish this transaction.
   Map<String, String> toFinishMap() => {
